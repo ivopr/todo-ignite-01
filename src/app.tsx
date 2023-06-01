@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { TargetedEvent } from "preact/compat"
 import logo from "./assets/logo.svg"
 import './index.css'
@@ -6,9 +6,19 @@ import { ListHeader } from './components/list-header'
 import { ListItem } from './components/list-item'
 import { CreateTaskForm } from './components/create-task-form'
 import { ListEmpty } from './components/list-empty'
-
+import cookie from "js-cookie"
 export function App() {
   const [tasks, setTasks] = useState<Task[]>([])
+  const taskCookieKey = "todo_items"
+
+  useEffect(() => {
+    const cookieData = cookie.get(taskCookieKey)
+    if (tasks.length === 0 && cookieData) {
+      setTasks(JSON.parse(cookieData))
+    } else {
+      cookie.set(taskCookieKey, JSON.stringify(tasks))
+    }
+  }, [tasks])
 
   function handleCreateTask(event: TargetedEvent<HTMLFormElement>) {
     event.preventDefault()

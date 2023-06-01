@@ -14,7 +14,7 @@ export function ListItem({deleteTask, task, toggleIsCompleted}: ListItemProps) {
         id="isPublic"
         name="isPublic"
         onClick={() => toggleIsCompleted(task.createdAt)}
-        value={task.isCompleted ? 1 : 0}
+        checked={task.isCompleted}
         type="checkbox"
       />
 
