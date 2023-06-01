@@ -69,6 +69,8 @@ export function App() {
     const newTasks = tasks.filter(t => t.createdAt !== taskDate)
 
     setTasks(newTasks)
+
+    cookie.set(taskCookieKey, JSON.stringify(newTasks), {path: "/", expires: 60 * 60 * 24 * 30 * 12})
   }
 
   return (
