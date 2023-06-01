@@ -7,6 +7,7 @@ import { ListItem } from './components/list-item'
 import { CreateTaskForm } from './components/create-task-form'
 import { ListEmpty } from './components/list-empty'
 import cookie from "js-cookie"
+
 export function App() {
   const [tasks, setTasks] = useState<Task[]>([])
   const taskCookieKey = "todo_items"
@@ -15,10 +16,8 @@ export function App() {
     const cookieData = cookie.get(taskCookieKey)
     if (tasks.length === 0 && cookieData) {
       setTasks(JSON.parse(cookieData))
-    } else {
-      cookie.set(taskCookieKey, JSON.stringify(tasks))
     }
-  }, [tasks])
+  }, [])
 
   function handleCreateTask(event: TargetedEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -44,7 +43,12 @@ export function App() {
       titleInput.value=""
     }
 
-    setTasks(oldTasks => [...oldTasks, newTask])
+    const newTasks = [...tasks, newTask]
+
+    setTasks(newTasks)
+
+    cookie.set(taskCookieKey, JSON.stringify(newTasks), {path: "/", expires: 60 * 60 * 24 * 30 * 12})
+
   }
 
   function toggleIsCompleted(taskDate: Date) {
